@@ -22,10 +22,12 @@ namespace Stomach
         
         public DBAdapter()
         {
-            path ="./record_stomach.db"; 
+            path ="./record_stomach_new.db"; 
             dataSource = "Data Source="+ path;
-
             dbCreate();
+            dbRecordCreate();
+            dbMemberCreate();
+
         }
 
         public DataSet SelectAll(string table)
@@ -67,6 +69,54 @@ namespace Stomach
                 throw;
             }
         }
+        public long record_Insert(string table, string value)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(dataSource))
+                {
+                    conn.Open();
+                    string sql = $"INSERT INTO {table} (caseID, recordDate, all_time, stomach_time, Biopsy, E, S1, S2, S3, S4, S5, D1, D2 ,X, S6, Sedation, AI_use, name) VALUES ({value});";
+
+                    SQLiteCommand cmd = new SQLiteCommand();
+                    cmd.Connection = conn;
+
+     
+                    cmd.CommandText = sql+ "SELECT last_insert_rowid();";
+                    
+                    return (long)cmd.ExecuteScalar();
+                  
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                throw;
+            }
+
+            return -1;
+        }
+
+        public void member_Insert(string table, string value)
+        {
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(dataSource))
+                {
+                    conn.Open();
+                    string sql = $"INSERT INTO {table} (name, regdate) VALUES ({value})";
+                    Console.WriteLine(sql);
+                    SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                throw;
+            }
+        }
 
         public void Insert(string table, string value)
         {
@@ -87,7 +137,6 @@ namespace Stomach
                 throw;
             }
         }
-
         public void Update(string table, string setvalue, string wherevalue = "")
         {
             try
@@ -96,13 +145,14 @@ namespace Stomach
                 {
                     conn.Open();
                     string sql = $"UPDATE {table} SET {setvalue} WHERE {wherevalue}";
+                    
                     SQLiteCommand cmd = new SQLiteCommand(sql, conn);
                     cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+               //MessageBox.Show(e.ToString());
                 throw;
             }
         }
@@ -121,7 +171,7 @@ namespace Stomach
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+              
                 throw;
             }
         }
@@ -140,7 +190,7 @@ namespace Stomach
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+               
                 throw;
             }
         }
@@ -156,25 +206,58 @@ namespace Stomach
                 else
                 {
                     //MessageBox.Show("created DB");
-                    return;
+                    
                 }
 
-                // 테이블 생성 코드
-                SQLiteConnection sqliteConn = new SQLiteConnection(dataSource);
-                sqliteConn.Open();
-
-                string strsql = "CREATE TABLE IF NOT EXISTS record_stomach (caseID TEXT PRIMARY KEY, recordDate TEXT, all_time TEXT, stomach_time TEXT, biopsy_flag INTEGER, E INTEGER, S1 INTEGER, S2 INTEGER, S3 INTEGER, S4 INTEGER, S5 INTEGER, D1 INTEGER, D2 INTEGER )";
-                 
-                SQLiteCommand cmd = new SQLiteCommand(strsql, sqliteConn);
-                cmd.ExecuteNonQuery();
-                sqliteConn.Close();
-
+              
             }
             catch (Exception e)
             {
                 //MessageBox.Show(e.ToString());
             }
         }
-    
+
+        private void dbRecordCreate()
+        {
+            try
+            {
+                // 테이블 생성 코드
+                SQLiteConnection sqliteConn = new SQLiteConnection(dataSource);
+                sqliteConn.Open();
+
+                string strsql = "CREATE TABLE IF NOT EXISTS record_stomach_new(record_index INTEGER PRIMARY KEY AUTOINCREMENT, caseID TEXT, recordDate TEXT, all_time TEXT, stomach_time TEXT,  Biopsy INTEGER, E INTEGER, S1 INTEGER, S2 INTEGER, S3 INTEGER, S4 INTEGER, S5 INTEGER, D1 INTEGER, D2 INTEGER, X INTEGER, S6 INTEGER, Sedation INTEGER, AI_use INTEGER, name TEXT )";
+
+                SQLiteCommand cmd = new SQLiteCommand(strsql, sqliteConn);
+                cmd.ExecuteNonQuery();
+                sqliteConn.Close();
+
+              
+            }
+            catch (Exception e)
+            {
+                //MessageBox.Show(e.ToString());
+            }
+        }
+        private void dbMemberCreate()
+        {
+            try
+            { 
+
+                // 테이블 생성 코드
+                SQLiteConnection sqliteConn = new SQLiteConnection(dataSource);
+                sqliteConn.Open();
+
+                string strsql = "CREATE TABLE IF NOT EXISTS member(memberID Integer PRIMARY KEY autoincrement, name Text, regdate Text )";
+
+                SQLiteCommand cmd = new SQLiteCommand(strsql, sqliteConn);
+                cmd.ExecuteNonQuery();
+                sqliteConn.Close();
+               
+            }
+            catch (Exception e)
+            {
+                //MessageBox.Show(e.ToString());
+            }
+        }
     }
 }

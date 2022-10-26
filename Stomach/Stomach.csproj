@@ -51,6 +51,9 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>exe_endo_icon1.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -107,8 +110,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoClosingMessageBox.cs" />
+    <Compile Include="CheckForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckForm.Designer.cs">
+      <DependentUpon>CheckForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controller.cs" />
+    <Compile Include="checkFlagForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="checkFlagForm.Designer.cs">
+      <DependentUpon>checkFlagForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DBAdapter.cs" />
+    <Compile Include="member.cs" />
+    <Compile Include="memberForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="memberForm.Designer.cs">
+      <DependentUpon>memberForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Packet.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="DataGrid.cs">
@@ -131,6 +153,12 @@
     <Compile Include="ImageDisplay.Designer.cs">
       <DependentUpon>ImageDisplay.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="checkFlagForm.resx">
+      <DependentUpon>checkFlagForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckForm.resx">
+      <DependentUpon>CheckForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataGrid.resx">
       <DependentUpon>DataGrid.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -142,6 +170,9 @@
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="memberForm.resx">
+      <DependentUpon>memberForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -190,9 +221,11 @@
     <None Include="Resources\4_complete.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="exe_endo_icon1.ico" />
     <Content Include="OpenCvSharpExtern.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\zio_med_logo.png" />
     <None Include="Resources\7.png" />
     <None Include="Resources\6.png" />
     <None Include="Resources\5.png" />

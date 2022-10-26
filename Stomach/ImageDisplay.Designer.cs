@@ -32,11 +32,13 @@ namespace Stomach
             this.pBimage = new System.Windows.Forms.PictureBox();
             this.iTag = new System.Windows.Forms.Label();
             this.fileName = new System.Windows.Forms.Label();
+            this.time_info = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pBimage)).BeginInit();
             this.SuspendLayout();
             // 
             // pBimage
             // 
+            this.pBimage.BackColor = System.Drawing.SystemColors.Control;
             this.pBimage.Location = new System.Drawing.Point(4, 4);
             this.pBimage.Margin = new System.Windows.Forms.Padding(4);
             this.pBimage.Name = "pBimage";
@@ -69,10 +71,21 @@ namespace Stomach
             this.fileName.Text = "fileName";
             this.fileName.Visible = false;
             // 
+            // time_info
+            // 
+            this.time_info.AutoSize = true;
+            this.time_info.Location = new System.Drawing.Point(19, 246);
+            this.time_info.Name = "time_info";
+            this.time_info.Size = new System.Drawing.Size(54, 18);
+            this.time_info.TabIndex = 3;
+            this.time_info.Text = "label1";
+            this.time_info.Visible = false;
+            // 
             // ImageDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.time_info);
             this.Controls.Add(this.fileName);
             this.Controls.Add(this.iTag);
             this.Controls.Add(this.pBimage);
@@ -90,5 +103,6 @@ namespace Stomach
         public System.Windows.Forms.PictureBox pBimage;
         public System.Windows.Forms.Label iTag;
         public System.Windows.Forms.Label fileName;
+        public System.Windows.Forms.Label time_info;
     }
 }

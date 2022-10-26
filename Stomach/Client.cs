@@ -30,7 +30,7 @@ namespace Stomach
         int port;
         public Boolean stopIs = false;
         public Boolean _connectFlag = false;
-        int i;
+       
 
         public bool Initalize(string ip, int port)
         {
@@ -44,7 +44,7 @@ namespace Stomach
                     tcpClient = new TcpClient(ip, port);
                     Main._f.statusImage.Image = Properties.Resources._1_connected;
                     _connectFlag = true;
-                    i = 0;
+                   
                 }
 
                 if (tcpClient.Connected)
@@ -53,6 +53,8 @@ namespace Stomach
                     // 이미 실행 
                     Console.WriteLine("Connected to: {0}:{1}", ip, port);
                     stopIs = false;
+
+
                     _connectFlag = true;
                 }
     
@@ -125,11 +127,6 @@ namespace Stomach
 
                         _imgCount++;
                     }
-
-                    
-
-
-
                 }
 
                 BeginRead();
@@ -140,14 +137,13 @@ namespace Stomach
                 /*
                  * 추가 로그를 파일로 저장 
                  */
-                if(i<1)
-                    MessageBox.Show("server disconnected");
-                
+
+                Console.WriteLine(ex.Message);
+                MessageBox.Show("server disconnected");
                 tcpClient = null;
                 //Initalize(ip, port);
 
-                i++;
-                
+              
                 
             }
         }

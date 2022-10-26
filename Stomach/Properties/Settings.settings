@@ -8,5 +8,11 @@
     <Setting Name="port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">9999</Value>
     </Setting>
+    <Setting Name="checkflag" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="userRes" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

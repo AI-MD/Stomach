@@ -12,7 +12,6 @@ using System.Windows.Forms;
 using System.Threading;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using System.Threading;
 using System.IO;
 
 
@@ -35,7 +34,7 @@ namespace Stomach
         public PictureBox pic5 = new PictureBox();
         public PictureBox pic6 = new PictureBox();
 
-        public Boolean _adminFlag;
+       
         public Boolean _is_Pause = false;
 
         public static Main _f;
@@ -46,16 +45,22 @@ namespace Stomach
         Controller controller;
         DBAdapter dbAdapter;
         
+        public Boolean ai_flag = false;
+        public Boolean sedative_flag = false;
+       
         public Main(string[] args)
         {
             //ipAdress = "127.0.0.1";
             //port = 9999;
            
+
+
+
+
             if (args.Length == 0)
             {
                 ipAddress = "127.0.0.1";
-                port = 9999;
-                _adminFlag = true;
+                port = 9991; 
             }
 
             else
@@ -65,20 +70,15 @@ namespace Stomach
 
                 for (int i = 0; i < p.Length; i++)
                 {
-
                     port = port * 10 + (p[i] - '0');
-
                 }
-
-                _adminFlag = Convert.ToBoolean(args[2]);
             }
 
      
              _f = this;
             InitializeComponent();
             clientInit();
-            pauseInit();
-
+           
 
             this.FormClosed += Form_Closing;
             imageDisplayLayout.Controls.Clear();
@@ -95,15 +95,15 @@ namespace Stomach
             start_btn.ForeColor = Color.Green;
             start_btn.FlatStyle = FlatStyle.Flat;
             start_btn.FlatAppearance.BorderColor = Color.Green;
-            pause_btn.ForeColor = Color.Chocolate;
-            pause_btn.FlatStyle = FlatStyle.Flat;
-            pause_btn.FlatAppearance.BorderColor = Color.Chocolate;
+            save_btn.ForeColor = Color.Chocolate;
+            save_btn.FlatStyle = FlatStyle.Flat;
+            save_btn.FlatAppearance.BorderColor = Color.Chocolate;
             stop_btn.ForeColor = Color.Red;
             stop_btn.FlatStyle = FlatStyle.Flat;
             stop_btn.FlatAppearance.BorderColor = Color.Red;
-            save_button.ForeColor = Color.BlueViolet;
-            save_button.FlatStyle = FlatStyle.Flat;
-            save_button.FlatAppearance.BorderColor = Color.BlueViolet;
+            export_button.ForeColor = Color.BlueViolet;
+            export_button.FlatStyle = FlatStyle.Flat;
+            export_button.FlatAppearance.BorderColor = Color.BlueViolet;
 
             DataGridViewRow row = totalTimeView.Rows[0];
             row.Height = 35;
@@ -181,6 +181,7 @@ namespace Stomach
             dbAdapter = new DBAdapter();
             controller = new Controller();
             controller.setDBAdapter(dbAdapter);
+            controller.search();
         }
 
 
@@ -190,96 +191,62 @@ namespace Stomach
             //controller.stop_control();
         }
 
-        /*사용자의 권한에 따른 차이를 두는 부분 (ADMIN, CLIENT)*/
+      
         private void clientInit()
         {
-            if (_adminFlag)
-            {
-                user.Text = "USER : ADMIN";
-                label2.Visible = true;
-                S1_button.Visible = true;
-                S2_button.Visible = true;
-                S3_button.Visible = true;
-                S4_button.Visible = true;
-                S5_button.Visible = true;
-                D1_button.Visible = true;
-                D2_button.Visible = true;
-                E_button.Visible = true;
-                groupBox1.Visible = false;
-            }
-            else
-            {
-                user.Text = "USER : CLIENT";
-                label2.Visible = false;
-                S1_button.Visible = false;
-                S2_button.Visible = false;
-                S3_button.Visible = false;
-                S4_button.Visible = false;
-                S5_button.Visible = false;
-                D1_button.Visible = false;
-                D2_button.Visible = false;
-                E_button.Visible = false;
-                groupBox1.Visible = false;
+                /*
+                 * 
+                 * 회원 관리 추가
+                 * 
+                 * */
+                enroll.Text = "등록";
+                user.Text = "USER";
 
-            }
         }
-        /*****************************************************/
 
-        /*일시정지 상태에 따른 차이를 두는 부분*/
         public void pauseInit()
         {
+
             if (_is_Pause)
-            {
-                pause_btn.Text = "RESUME";
-                S1_button.Enabled = true;
-                S2_button.Enabled = true;
-                S4_button.Enabled = true;
-                S3_button.Enabled = true;
-                S5_button.Enabled = true;
-                D1_button.Enabled = true;
-                D2_button.Enabled = true;
-                E_button.Enabled = true;
-            }
+                pause.Text = "continue";
             else
-            {
-                pause_btn.Text = "SAVE";
-                S1_button.Enabled = false;
-                S2_button.Enabled = false;
-                S4_button.Enabled = false;
-                S3_button.Enabled = false;
-                S5_button.Enabled = false;
-                D1_button.Enabled = false;
-                D2_button.Enabled = false;
-                E_button.Enabled = false;
-
-            }
+                pause.Text = "pause";
         }
-        /****************************************************/
-        private void user_convert_Click(object sender, EventArgs e)
-        {
-            if (_adminFlag)
-            {
-                _adminFlag = false;
-            }
-            else
-            {
-                _adminFlag = true;
-            }
+        
 
-            clientInit();
+        /****************************************************/
+        private void delete_Click(object sender, EventArgs e)
+        {
+            controller.deleteUser();
         }
 
         private void start_btn_Click(object sender, EventArgs e)
         {
-            controller.updateMain();
-            controller.mainTask(ipAddress, port);
+
+
+
+            if (controller.updateMain())
+            {
+                checkFlagForm checkFlag = new checkFlagForm();
+               
+                DialogResult result =  checkFlag.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    controller.mainTask(ipAddress, port);
+                }
+                else
+                {
+                    MessageBox.Show("진정 내시경 및 인공지능 사용 유무를 설정하고 시작해야 합니다.");
+                }
+            }
+
 
         }
 
-        private void pause_btn_Click(object sender, EventArgs e)
+        private void save_btn_Click(object sender, EventArgs e)
         {
 
-            controller.pause_control(_is_Pause);
+            controller.save_control();
 
         }
 
@@ -294,17 +261,7 @@ namespace Stomach
             controller.changeFilter(filtering_box.Text);
 
         }
-        public void ImageDisplay_Click(object sender, MouseEventArgs e)
-        {
-
-            if (e.Button == MouseButtons.Left)
-            {
-                PictureBox pb = sender as PictureBox;
-
-                controller.changeTag(pb.Parent);
-
-            }
-        }
+      
         private void Main_Resize(object sender, EventArgs e)
         {
             switch (imageDisplayLayout.Width / 200)
@@ -334,23 +291,13 @@ namespace Stomach
 
         }
 
-        private void save_button_Click(object sender, EventArgs e)
+        private void export_button_Click(object sender, EventArgs e)
         {
 
-            controller.saveTag(_is_Pause);
+            controller.export();
         }
 
-        private void imageDisplayLayout_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                PictureBox pb = sender as PictureBox;
-
-                controller.changeTag(pb.Parent);
-
-            }
-        }
-
+       
         private void totalTimeView_SizeChanged(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in totalTimeView.Rows)
@@ -367,10 +314,59 @@ namespace Stomach
             }
         }
 
-        private void TimeLayout_Paint(object sender, PaintEventArgs e)
+
+        private void enroll_Click(object sender, EventArgs e)
+        {
+            controller.enroll();
+        
+        }
+        
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox com = (ComboBox)sender;
+            controller.changeUser((string)com.SelectedItem);
+        }
+
+        private void Main_Load(object sender, EventArgs e)
         {
 
+            CheckForm checkForm = new CheckForm();
+            
+            DialogResult result = checkForm.ShowDialog();
+
+            if (result != DialogResult.OK)
+            {
+                MessageBox.Show("프로그램 종료");
+                this.Close();
+            }
+            else
+            {
+
+
+            }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            controller.imageSave();
+        }
+
+        private void pause_Click(object sender, EventArgs e)
+        {
+            controller.pause();
+        }
+      
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            controller.checkAIflag();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            controller.checksedativeflag();
+        }
+
+       
     }
 }
 

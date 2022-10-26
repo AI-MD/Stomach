@@ -101,6 +101,15 @@ namespace Stomach.Properties {
         }
         
         /// <summary>
+        ///   False과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string checkFlag {
+            get {
+                return ResourceManager.GetString("checkFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
         internal static System.Drawing.Bitmap D1 {
@@ -186,6 +195,16 @@ namespace Stomach.Properties {
         internal static string String {
             get {
                 return ResourceManager.GetString("String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap zio_med_logo {
+            get {
+                object obj = ResourceManager.GetObject("zio_med_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
